@@ -1,1 +1,3 @@
 dev/* linguist-vendored
+tests/* linguist-vendored
+src/vendor/* linguist-vendored
