@@ -70,9 +70,29 @@ static void _buildChildren(Style::Computer &c, Vec<Strong<Markup::Node>> const &
     }
 }
 
+static Opt<Math::Vec2u> _parseTableSpans(Markup::Element const &el) {
+    auto rowSpan = el.getAttribute(AttrName{Html::AttrId::ROWSPAN});
+    auto colSpan = el.getAttribute(AttrName{Html::AttrId::COLSPAN});
+
+    if (rowSpan == NONE and colSpan == NONE)
+        return NONE;
+
+    usize rowSpanValue = 1, colSpanValue = 1;
+
+    // FIXME: prolly wrong use of Str API (atoi + buf())
+    if (rowSpan)
+        rowSpanValue = min(65534, atoi(rowSpan.unwrap().buf()));
+
+    if (colSpan)
+        colSpanValue = min(1000, atoi(colSpan.unwrap().buf()));
+
+    return Opt<Math::Vec2u>{{rowSpanValue, colSpanValue}};
+}
+
 static void _buildElement(Style::Computer &c, Markup::Element const &el, Frag &parent) {
     auto style = c.computeFor(*parent.style, el);
     auto font = Text::Font{regularFontface(), 16};
+    auto tableSpan = _parseTableSpans(el);
 
     if (el.tagName == Html::IMG) {
         Image::Picture img = Gfx::Surface::fallback();
@@ -91,6 +111,12 @@ static void _buildElement(Style::Computer &c, Markup::Element const &el, Frag &p
     }
 
     Frag frag = {style, font};
+    if (tableSpan)
+        frag.tableSpan.cow() = {
+            tableSpan.unwrap().x,
+            tableSpan.unwrap().y,
+        };
+
     _buildChildren(c, el.children(), frag);
     parent.add(std::move(frag));
 }

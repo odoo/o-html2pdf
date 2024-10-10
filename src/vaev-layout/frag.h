@@ -22,6 +22,7 @@ struct Frag : public Meta::NoCopy {
     Text::Font font;
     Content content = NONE;
     Layout layout;
+    Cow<TableSpan> tableSpan;
 
     Frag(Strong<Style::Computed> style, Text::Font font);
 

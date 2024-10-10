@@ -90,4 +90,8 @@ struct Frag;
 
 struct Tree;
 
+struct TableSpan {
+    usize row = 1, col = 1;
+};
+
 } // namespace Vaev::Layout
