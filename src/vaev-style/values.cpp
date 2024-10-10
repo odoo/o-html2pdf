@@ -307,6 +307,21 @@ static Res<Display> _parseLegacyDisplay(Cursor<Css::Sst> &c) {
     return Error::invalidData("expected legacy display value");
 }
 
+// MARK: TableLayout
+// https://www.w3.org/TR/CSS21/tables.html#propdef-table-layout
+Res<TableLayout> ValueParser<TableLayout>::parse(Cursor<Css::Sst> &c) {
+    if (c.ended())
+        return Error::invalidData("unexpected end of input");
+
+    if (c.skip(Css::Token::ident("auto"))) {
+        return Ok(TableLayout::AUTO);
+    } else if (c.skip(Css::Token::ident("fixed"))) {
+        return Ok(TableLayout::FIXED);
+    }
+
+    return Error::invalidData("expected legacy display value");
+}
+
 static Res<Display::Outside> _parseOutsideDisplay(Cursor<Css::Sst> &c) {
     if (c.ended())
         return Error::invalidData("unexpected end of input");

@@ -212,4 +212,11 @@ struct Display {
     }
 };
 
+enum struct TableLayout {
+    AUTO,
+    FIXED,
+
+    _LEN
+};
+
 } // namespace Vaev

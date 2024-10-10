@@ -321,6 +321,24 @@ struct DisplayProp {
     }
 };
 
+// https://www.w3.org/TR/CSS21/tables.html#propdef-table-layout
+struct TableLayoutProp {
+    TableLayout value = initial();
+
+    static constexpr Str name() { return "table-layout"; }
+
+    static constexpr TableLayout initial() { return TableLayout::AUTO; }
+
+    void apply(Computed &s) const {
+        s.tableLayout.cow() = value;
+    }
+
+    Res<> parse(Cursor<Css::Sst> &c) {
+        value = try$(parseValue<TableLayout>(c));
+        return Ok();
+    }
+};
+
 // MARK: Borders ---------------------------------------------------------------
 
 // https://www.w3.org/TR/CSS22/tables.html#propdef-border-collapse
@@ -1660,6 +1678,7 @@ using _StyleProp = Union<
     BackgroundProp,
     ColorProp,
     DisplayProp,
+    TableLayoutProp,
 
     // Borders
     BorderTopColorProp,

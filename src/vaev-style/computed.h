@@ -50,6 +50,8 @@ struct Computed {
     Display display;
     Integer order;
     Visibility visibility;
+    // https://w3.org/TR/css-tables-3/#table-structure
+    Cow<TableLayout> tableLayout;
 
     // CSS Fonts Module Level 4
     // https://www.w3.org/TR/css-fonts-4/

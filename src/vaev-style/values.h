@@ -146,6 +146,11 @@ struct ValueParser<Display> {
 };
 
 template <>
+struct ValueParser<TableLayout> {
+    static Res<TableLayout> parse(Cursor<Css::Sst> &c);
+};
+
+template <>
 struct ValueParser<FlexDirection> {
     static Res<FlexDirection> parse(Cursor<Css::Sst> &c);
 };
