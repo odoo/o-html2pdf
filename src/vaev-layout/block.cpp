@@ -9,7 +9,7 @@ static Px _blockLayoutDetermineWidth(Tree &t, Frag &f, Input input) {
     Px width = Px{0};
     for (auto &c : f.children()) {
 
-        if (c.style->sizing->width == Size::AUTO)
+        if (c.style->sizing->width == Size::AUTO and input.intrinsic.x == IntrinsicSize::AUTO)
             width = max(width, input.knownSize.width.unwrapOr(Px{0}));
         else {
             auto ouput = layout(

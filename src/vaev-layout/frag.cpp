@@ -237,10 +237,10 @@ static Math::Radii<Px> _computeRadii(Tree &t, Frag &f, Vec2Px size) {
     return res;
 }
 
-static Cons<Opt<Px>, IntrinsicSize> _computeSpecifiedSize(Tree &t, Frag &f, Input input, Size size) {
-    if (size == Size::MIN_CONTENT) {
+static Cons<Opt<Px>, IntrinsicSize> _computeSpecifiedSize(Tree &t, Frag &f, Input input, Size size, IntrinsicSize intrinsic) {
+    if (size == Size::MIN_CONTENT or intrinsic == IntrinsicSize::MIN_CONTENT) {
         return {NONE, IntrinsicSize::MIN_CONTENT};
-    } else if (size == Size::MAX_CONTENT) {
+    } else if (size == Size::MAX_CONTENT or intrinsic == IntrinsicSize::MAX_CONTENT) {
         return {NONE, IntrinsicSize::MAX_CONTENT};
     } else if (size == Size::AUTO) {
         return {NONE, IntrinsicSize::AUTO};
@@ -259,7 +259,7 @@ Output layout(Tree &t, Frag &f, Input input) {
     auto padding = _computePaddings(t, f, input);
     auto sizing = f.style->sizing;
 
-    auto [specifiedWidth, widthIntrinsicSize] = _computeSpecifiedSize(t, f, input, sizing->width);
+    auto [specifiedWidth, widthIntrinsicSize] = _computeSpecifiedSize(t, f, input, sizing->width, input.intrinsic.x);
     if (input.knownSize.width == NONE) {
         input.knownSize.width = specifiedWidth;
     }
@@ -269,7 +269,7 @@ Output layout(Tree &t, Frag &f, Input input) {
     });
     input.intrinsic.x = widthIntrinsicSize;
 
-    auto [specifiedHeight, heightIntrinsicSize] = _computeSpecifiedSize(t, f, input, sizing->height);
+    auto [specifiedHeight, heightIntrinsicSize] = _computeSpecifiedSize(t, f, input, sizing->height, input.intrinsic.y);
     if (input.knownSize.height == NONE) {
         input.knownSize.height = specifiedHeight;
     }
